@@ -50,7 +50,7 @@ class User(AbstractBaseUser):
     )
     birth_date = models.DateField(null=True)
     status = models.CharField(max_length=200, default=' ', null=True)
-    first_name = models.CharField(max_length=200, null=True)
+    first_name = models.TextField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
     username = models.CharField(max_length=200)
     country = models.CharField(max_length=200, null=True)

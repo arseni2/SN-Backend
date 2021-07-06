@@ -8,11 +8,13 @@ User = get_user_model()
 class LikePost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     likes = models.PositiveIntegerField(default=0, blank=True, null=True)
+    def __str__(self):
+        return str(self.user.first_name) + "  " + "liked"
 
 class PostWall(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     des = models.CharField(max_length=256)
-    image = models.ImageField(upload_to='post', blank=True, null=True, default='')
+    image = models.ImageField(upload_to='post', blank=True, null=True)
     like = models.ManyToManyField(LikePost, blank=True, default=1)
     date = models.DateField("Date", default=datetime.date.today)
     editMode = models.BooleanField(default=False)
@@ -21,13 +23,16 @@ class PostWall(models.Model):
         return str(self.des)
     def save(self, *args, **kwargs):
         if self.image:
-            super().save(*args, **kwargs)
-        im = Image.open(self.image)
-        im.save(self.image.path, optimize=True, quality=60)
+            im = Image.open(self.image)
+            im.save(self.image.path, optimize=True, quality=60)
+            return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
 
     def delete(self, *args, **kwargs):
         self.image.delete(save=False)
         super(PostWall, self).delete(*args, **kwargs)
+
 
 class Reviews(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

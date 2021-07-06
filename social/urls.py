@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+import debug_toolbar
 from django.conf.urls.static import static
 from .yasg import urlpatterns as doc_urls
 
@@ -23,6 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('socialAuth.urls')),
     path('profile/', include('Profile.urls')),
+    path('users/', include('users.urls')),
+    path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 urlpatterns += doc_urls

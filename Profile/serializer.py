@@ -70,6 +70,7 @@ class PostWallSerializer(FlexFieldsModelSerializer, serializers.ModelSerializer)
     reviews = ReviewsSerializer(many=True, read_only=True, required=False)
     like = LikeSerializerPost(many=True, read_only=True, required=False, allow_empty=True, allow_null=True)
     likes_count = serializers.IntegerField(read_only=True, required=False)
+    image = serializers.ImageField(required=False)
     class Meta:
         model = PostWall
         fields = ('user', 'des', 'image', 'like', 'date', 'id', 'editMode', 'reviews', 'likes_count')

@@ -16,6 +16,10 @@ django-allauth = "*"
 django-cors-headers = "*"
 easy-thumbnails = "*"
 drf-flex-fields = "*"
+django-filter = "*"
+django-ckeditor = "*"
+django-debug-toolbar = "*"
+django-mptt = "*"
 
 [dev-packages]
 

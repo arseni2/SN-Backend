@@ -57,6 +57,8 @@ class UserChangeForm(forms.ModelForm):
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
+    save_as = True
+    save_on_top = True
     form = UserChangeForm
     add_form = UserCreationForm
 
@@ -75,7 +77,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'first_name', 'userPhotos', 'username', 'slug')}
+            'fields': ('full_name', 'slug', 'userPhotos', 'is_admin', 'is_active', 'year', 'country', 'username', 'last_name', 'first_name', 'status', 'birth_date', 'email', 'password1', 'password2')}
         ),
     )
     search_fields = ('email',)

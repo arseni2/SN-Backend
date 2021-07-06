@@ -36,6 +36,15 @@ def userDetail(request):
         'success': 1,
     }
     return Response(obj)
+
+class deletePost(APIView):
+    def post(self, request, pk, format=None):
+        snippet = PostWall.objects.filter(id=pk)
+        snippet.delete()
+        posts = PostWall.objects.filter(user=request.user).annotate(likes_count=Count('like')) #можно было глянуть и сделать как в movieapi
+        serializer = PostWallSerializer(posts, many=True)
+        return Response(serializer.data)#2 - delete successfuly
+
 @api_view(('POST', ))
 def addLikePost(request):
     '''
@@ -99,7 +108,7 @@ def CreatePostOnWall(request):
     serializer = PostWallSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
-        posts = PostWall.objects.filter(user=request.user)
+        posts = PostWall.objects.filter(user=request.user).annotate(likes_count=Count('like'))
         postsS = PostWallSerializer(posts, many=True)
         obj = {
             'posts': postsS.data,
@@ -138,13 +147,6 @@ class SnippetDetail(APIView):
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class deletePost(APIView):
-    def post(self, request, pk, format=None):
-        snippet = PostWall.objects.filter(id=pk)
-        snippet.delete()
-        posts = PostWall.objects.filter(user=request.user)
-        serializer = PostWallSerializer(posts, many=True)
-        return Response(serializer.data)#2 - delete successfuly
 
 class updatePost(EnablePartialUpdateMixin, generics.RetrieveUpdateAPIView):
     queryset = PostWall.objects.all()
@@ -153,7 +155,7 @@ class updatePost(EnablePartialUpdateMixin, generics.RetrieveUpdateAPIView):
     def get_queryset(self):
         return PostWall.objects.filter(user=self.request.user)
 
-@api_view(['POST', ])
+@api_view(['POST', ]) #можно с комментом возвращать массив детей тоесть у каждого коммента будет массив детей и при создании сетать коммент в дети родителя
 def createReviews(request):
     serializer = createReviewsSerializer(data=request.data)
     if serializer.is_valid():
@@ -186,5 +188,6 @@ await говорит в питоне сделай это одновременн�
 """
 """
 смотреть в заметке ресурся длоя изучения и там смотреть интересные материалы и пилить этот проект используя лучшие практики
-
+насчёт комментов можно при запросе получать все комменты и там смотреть на айди и парент айди и сетать в свойство чилдрен
+а ппри создании коммента можно смотреть на парент айди и сетать его к детям комента с таким-же айдишником
 """
